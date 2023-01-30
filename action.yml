@@ -1,0 +1,31 @@
+name: 'Upload file to ContentStack'
+description: 'Upload file at provided path to ContentStack Assets'
+inputs:
+  file_path: 
+    description: Path of the file to upload
+    required: true
+
+  management_token:
+    description: 'Management Token'
+    required: true
+
+  api_key:
+    description: 'Stack Api Key'
+    required: true
+
+  folder_uid:
+    description: 'Folder Uid under which file is to be uploaded in ContentStack Assets'
+    required: false
+    default: ""
+
+  host_url:
+    description: 'Region based URL for where to upload the file'
+    required: false
+    default: https://api.contentstack.io/v3/assets
+    
+outputs:
+  link:
+    description: 'Link where the asset is uploaded'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
