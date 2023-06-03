@@ -15,7 +15,11 @@ jobs:
       run: |
         curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash > install.bash
         chmod +x install.bash
-        echo "4" | ./install.bash --pre-push
+        ./install.bash --pre-push <<EOF
+        4
+        EOF
+
+
 
     - name: Run Talisman
       run: ~/.talisman/bin/talisman_hook_script pre-push
