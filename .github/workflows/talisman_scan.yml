@@ -1,4 +1,4 @@
-name: CI
+name: Talisman
 
 on: [push]
 
@@ -15,11 +15,10 @@ jobs:
       run: |
         curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash > install.bash
         chmod +x install.bash
-        ./install.bash --pre-push <<EOF
-        4
-        EOF
-
-
+        sed -i 's/read -p "PLEASE CHOOSE WHERE YOU WISH TO SET TALISMAN_HOME VARIABLE AND talisman binary PATH (Enter option number): " choice/choice=4/' install.bash
+        sed -i 's/read -p "No git template directory is configured. Let'\''s add one./choice=1/' install.bash
+        ./install.bash --pre-push
 
     - name: Run Talisman
-      run: ~/.talisman/bin/talisman_hook_script pre-push
+      run: |
+        ~/.talisman/bin/talisman --githook pre-push
