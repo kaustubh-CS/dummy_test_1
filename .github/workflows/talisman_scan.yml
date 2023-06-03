@@ -34,4 +34,4 @@ jobs:
 
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman --githook pre-push
+        ~/.talisman/bin/talisman_linux_amd64 --githook pre-push
