@@ -12,7 +12,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install Talisman
-      run: bash -c "$(curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash)" -- pre-push
+      run: |
+        curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash > install.bash
+        chmod +x install.bash
+        echo "4" | ./install.bash --pre-push
 
     - name: Run Talisman
       run: ~/.talisman/bin/talisman_hook_script pre-push
