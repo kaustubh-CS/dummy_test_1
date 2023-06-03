@@ -28,6 +28,10 @@ jobs:
         interact
         '
 
+    - name: List Talisman directory
+      run: |
+        ls -la ~/.talisman/bin
+
     - name: Run Talisman
       run: |
         ~/.talisman/bin/talisman --githook pre-push
