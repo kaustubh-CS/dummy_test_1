@@ -11,13 +11,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install Expect
+      run: sudo apt-get install -y expect
+
     - name: Install Talisman
       run: |
         curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash > install.bash
         chmod +x install.bash
-        sed -i 's/read -p "PLEASE CHOOSE WHERE YOU WISH TO SET TALISMAN_HOME VARIABLE AND talisman binary PATH (Enter option number): " choice/choice=4/' install.bash
-        sed -i 's/read -p "No git template directory is configured. Let'\''s add one./choice=1/' install.bash
-        ./install.bash --pre-push
+        expect -c '
+        set timeout -1
+        spawn ./install.bash --pre-push
+        expect "PLEASE CHOOSE WHERE YOU WISH TO SET TALISMAN_HOME VARIABLE AND talisman binary PATH (Enter option number): "
+        send "4\r"
+        expect "No git template directory is configured. Let'\''s add one."
+        send "1\r"
+        interact
+        '
 
     - name: Run Talisman
       run: |
