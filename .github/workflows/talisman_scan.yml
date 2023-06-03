@@ -1,0 +1,25 @@
+name: Talisman Code Scan
+
+on: [push]
+
+jobs:
+  talisman_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Setup Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+
+    - name: Install Talisman
+      run: |
+        curl https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash > install_talisman.bash
+        chmod +x install_talisman.bash
+        sudo ./install_talisman.bash
+
+    - name: Run Talisman
+      run: talisman --githook pre-push
