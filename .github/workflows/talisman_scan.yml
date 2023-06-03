@@ -17,7 +17,7 @@ jobs:
 
     - name: Install Talisman
       run: |
-        curl https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash > install_talisman.bash
+        curl https://thoughtworks.github.io/talisman/scripts/install.bash > install_talisman.bash
         chmod +x install_talisman.bash
         sudo ./install_talisman.bash
 
