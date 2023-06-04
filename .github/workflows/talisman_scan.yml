@@ -30,11 +30,6 @@ jobs:
         interact
         '
 
-    - name: List Talisman directory
-      run: |
-        ls -la ~/.talisman/bin
-
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64 --scan
-        cat talisman_report/talisman_reports/data/report.json
+        ~/.talisman/bin/talisman_linux_amd64 --githook pre-push
