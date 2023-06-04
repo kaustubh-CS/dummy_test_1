@@ -1,0 +1,37 @@
+name: Talisman
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Expect
+      run: sudo apt-get install -y expect
+
+    - name: Install Talisman
+      run: |
+        curl --silent https://thoughtworks.github.io/talisman/scripts/install.bash > install.bash
+        chmod +x install.bash
+        expect -c '
+        set timeout -1
+        spawn ./install.bash --pre-push
+        expect "PLEASE CHOOSE WHERE YOU WISH TO SET TALISMAN_HOME VARIABLE AND talisman binary PATH (Enter option number): "
+        send "4\r"
+        expect "No git template directory is configured. Let'\''s add one."
+        send "1\r"
+        interact
+        '
+
+    - name: List Talisman directory
+      run: |
+        ls -la ~/.talisman/bin
+
+    - name: Run Talisman
+      run: |
+        ~/.talisman/bin/talisman_linux_amd64 --githook pre-push
