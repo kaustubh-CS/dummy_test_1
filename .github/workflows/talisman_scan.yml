@@ -36,4 +36,4 @@ jobs:
 
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64
+        ~/.talisman/bin/talisman_linux_amd64 --scan
