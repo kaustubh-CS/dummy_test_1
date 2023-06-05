@@ -51,14 +51,10 @@ jobs:
             
     - name: List Talisman report directory
       run: |
-        ls -la talisman_report/talisman_reports/data
+        ls -la talisman_html_report
     
-    - name: Print Talisman report
-      run: |
-        jq '.' < talisman_report/talisman_reports/data/report.json
-        
     - name: Upload HTML report
       uses: actions/upload-artifact@v2
       with:
           name: talisman-report
-          path: talisman_report/talisman_reports/data/report.html
+          path: talisman_html_report/report.html
