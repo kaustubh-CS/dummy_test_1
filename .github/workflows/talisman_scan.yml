@@ -55,13 +55,11 @@ jobs:
         ls -la talisman_report/talisman_reports/data
         ls -la talisman_html_report
     
-    - name: Print raw Talisman report
-      run: |
-        cat talisman_report.json
-
+  
     - name: Print Talisman report
       run: |
-        jq '.' < talisman_report.json
+        jq '.' < talisman_report/talisman_reports/data/report.json
+        
     - name: Upload HTML report
       uses: actions/upload-artifact@v2
       with:
