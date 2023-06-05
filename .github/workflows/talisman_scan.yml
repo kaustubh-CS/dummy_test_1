@@ -28,7 +28,6 @@ jobs:
         send "1\r"
         interact
         '
-
     - name: Install Talisman HTML Report
       run: |
         curl https://github.com/jaydeepc/talisman-html-report/archive/v1.3.zip  -o ~/.talisman/talisman_html_report.zip -J -L
@@ -36,29 +35,33 @@ jobs:
         unzip talisman_html_report.zip -d .
         mv talisman-html-report-1.3 talisman_html_report
         rm talisman_html_report.zip
-
     - name: List Talisman directory
       run: |
         ls -la ~/.talisman/bin
-
     - name: Run Talisman
       run: |
         ~/.talisman/bin/talisman_linux_amd64 --scan > talisman_report.json 2> talisman_error.txt || true
         ~/.talisman/bin/talisman_linux_amd64 --scanWithHtml 2> talisman_html_error.txt || true
         
-    - name: Print Talisman error
+    - name: Print Talisman errors
       run: |
+        echo "Talisman Error:"
         cat talisman_error.txt
+        echo "Talisman HTML Error:"
+        cat talisman_html_error.txt
             
     - name: List Talisman report directory
       run: |
         ls -la talisman_report/talisman_reports/data
         ls -la talisman_html_report
     
+    - name: Print raw Talisman report
+      run: |
+        cat talisman_report.json
+
     - name: Print Talisman report
       run: |
         jq '.' < talisman_report.json
-
     - name: Upload HTML report
       uses: actions/upload-artifact@v2
       with:
