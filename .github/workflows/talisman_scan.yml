@@ -12,8 +12,8 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install Expect
-      run: sudo apt-get install -y expect
+    - name: Install Expect and jq
+      run: sudo apt-get install -y expect jq
 
     - name: Install Talisman
       run: |
@@ -47,4 +47,4 @@ jobs:
     
     - name: Print Talisman report
       run: |
-        cat talisman_report/talisman_reports/data/report.json
+        jq '.' < talisman_report/talisman_reports/data/report.json
