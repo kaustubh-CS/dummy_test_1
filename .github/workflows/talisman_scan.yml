@@ -44,3 +44,7 @@ jobs:
     - name: List Talisman report directory
       run: |
         ls -la talisman_report/talisman_reports/data
+    
+    - name: Print Talisman report
+      run: |
+        cat talisman_report/talisman_reports/data/report.json
