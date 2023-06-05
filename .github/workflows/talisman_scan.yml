@@ -35,7 +35,7 @@ jobs:
 
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64 --scan 2> talisman_error.txt || true
+        ~/.talisman/bin/talisman_linux_amd64 --scanWithHtml 2> talisman_error.txt || true
         
     - name: Print Talisman error
       run: |
@@ -48,3 +48,9 @@ jobs:
     - name: Print Talisman report
       run: |
         jq '.' < talisman_report/talisman_reports/data/report.json
+        
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v2
+      with:
+          name: talisman-report
+          path: talisman_report/talisman_reports/data/report.html
