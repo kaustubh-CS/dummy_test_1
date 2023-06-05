@@ -36,4 +36,7 @@ jobs:
     - name: Run Talisman
       run: |
         ~/.talisman/bin/talisman_linux_amd64 --scan
-        cat talisman_report/talisman_reports/data/report.json
+
+    - name: List Talisman report directory
+      run: |
+        ls -la talisman_report/talisman_reports/data
