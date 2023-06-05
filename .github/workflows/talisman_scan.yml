@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +29,22 @@ jobs:
         interact
         '
 
+    - name: List Talisman directory
+      run: |
+        ls -la ~/.talisman/bin
+
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64 --scan
+        ~/.talisman/bin/talisman_linux_amd64 --scan 2> talisman_error.txt || true
+        
+    - name: Print Talisman error
+      run: |
+        cat talisman_error.txt
+            
+    - name: List Talisman report directory
+      run: |
+        ls -la talisman_report/talisman_reports/data
+    
+    - name: Print Talisman report
+      run: |
+        cat talisman_report/talisman_reports/data/report.json
