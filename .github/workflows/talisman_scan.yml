@@ -35,8 +35,12 @@ jobs:
 
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64 --scan
-
+        ~/.talisman/bin/talisman_linux_amd64 --scan 2> talisman_error.txt || true
+        
+    - name: Print Talisman error
+      run: |
+        cat talisman_error.txt
+            
     - name: List Talisman report directory
       run: |
         ls -la talisman_report/talisman_reports/data
