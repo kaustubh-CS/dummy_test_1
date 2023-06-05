@@ -64,4 +64,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: talisman-report
-        path: talisman_html_report/report.html
+        path: talisman_html_report/
