@@ -79,3 +79,8 @@ jobs:
       with:
         name: talisman-report-pdf
         path: talisman_report.pdf
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v2
+      with:
+        name: talisman-report
+        path: talisman_html_report/
