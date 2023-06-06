@@ -1,4 +1,4 @@
-name: Other Talisman Secrets Scan
+name: Talisman Secrets Scan
 
 on: [push, pull_request]
 
@@ -9,6 +9,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Run Talisman Secrets Scan
       uses: carhartl/talisman-secrets-scan-action@main
