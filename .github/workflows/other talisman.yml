@@ -1,13 +1,14 @@
-- name: Detect secrets with Talisman
-  # You may pin to the exact commit or the version.
-  # uses: carhartl/talisman-secrets-scan-action@702fc5c52170632a568124896148a80f38521ac4
-  uses: carhartl/talisman-secrets-scan-action@v1.4.0
-  with:
-    # Ref that was updated
-    local-ref: # optional, default is ${{ github.ref }}
-    # The latest of the incoming commits
-    local-sha: # optional, default is ${{ github.event.after }}
-    # Ref that was updated
-    remote-ref: # optional, default is ${{ github.ref }}
-    # The latest commit on the remote being pushed to
-    remote-sha: # optional, default is ${{ github.event.before }}
+name: Other Talisman Secrets Scan
+
+on: [push, pull_request]
+
+jobs:
+  talisman_scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run Talisman Secrets Scan
+      uses: carhartl/talisman-secrets-scan-action@main
