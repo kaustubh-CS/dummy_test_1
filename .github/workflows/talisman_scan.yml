@@ -1,6 +1,6 @@
 name: Talisman
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -12,8 +12,11 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Install Expect and jq
-      run: sudo apt-get install -y expect jq
+    - name: Install Expect, jq and Python
+      run: sudo apt-get install -y expect jq python3 python3-pip
+
+    - name: Install Python packages
+      run: pip install pandas json2html tabulate
 
     - name: Install Talisman
       run: |
@@ -35,33 +38,44 @@ jobs:
         unzip talisman_html_report.zip -d .
         mv talisman-html-report-1.3 talisman_html_report
         rm talisman_html_report.zip
-    - name: List Talisman directory
+    - name: Install wkhtmltopdf
       run: |
-        ls -la ~/.talisman/bin
+       sudo apt-get install -y wkhtmltopdf
     - name: Run Talisman
       run: |
-        ~/.talisman/bin/talisman_linux_amd64 --scan > talisman_report.json 2> talisman_error.txt || true
-        ~/.talisman/bin/talisman_linux_amd64 --scanWithHtml 2> talisman_html_error.txt || true
-        
-    - name: Print Talisman errors
+        ~/.talisman/bin/talisman_linux_amd64 --scan > talisman_report.json 2> talisman_error.txt
+        ~/.talisman/bin/talisman_linux_amd64 --scanWithHtml 2> talisman_html_error.txt
+      continue-on-error: true
+    - name: Print Talisman report neatly
       run: |
-        echo "Talisman Error:"
-        cat talisman_error.txt
-        echo "Talisman HTML Error:"
-        cat talisman_html_error.txt
-            
-    - name: List Talisman report directory
+        python3 -c "
+        import json
+        import pandas as pd
+        from tabulate import tabulate
+        with open('talisman_report/talisman_reports/data/report.json') as f:
+          data = json.load(f)
+        df = pd.json_normalize(data['results'], 'failure_list', ['filename'])
+        df['commits'] = df['commits'].apply(lambda x: x[:3] if len(x) > 3 else x)
+        print(tabulate(df, headers='keys',tablefmt='psql', showindex=False))
+        "
+    - name: Convert JSON to HTML
       run: |
-        ls -la talisman_report/talisman_reports/data
-        ls -la talisman_html_report
-    
-  
-    - name: Print Talisman report
+        python3 -c "
+        import json
+        import os
+        from json2html import *
+        with open('talisman_report/talisman_reports/data/report.json') as f:
+            data = json.load(f)
+        html = json2html.convert(json = data)
+        os.makedirs('talisman_html_report', exist_ok=True)
+        with open('talisman_html_report/report.html', 'w') as f:
+            f.write(html)
+        "
+    - name: Convert HTML report to PDF
       run: |
-        jq '.' < talisman_report/talisman_reports/data/report.json
-        
-    - name: Upload HTML report
+        wkhtmltopdf talisman_html_report/report.html talisman_report.pdf
+    - name: Upload PDF report
       uses: actions/upload-artifact@v2
       with:
-        name: talisman-report
-        path: talisman_html_report/
+        name: talisman-report-pdf
+        path: talisman_report.pdf
